@@ -40,6 +40,7 @@ else
   <br><br>
 <button class="btn btn-primary" @onclick="AddToDo">Add To Do</button>
 <button class="btn btn-primary" @onclick="InvokeJavaScript">Invoke JavaScript</button>
+<button class="btn btn-primary" @onclick="DeleteAll">Delete All</button>
 @code {
     private int count = 0;
     private string jsonData;
@@ -48,6 +49,11 @@ else
     private string name;
     private string message;
 
+       private async void DeleteAll()
+    {
+        HttpClient httpClient = new HttpClient();
+        await httpClient.DeleteAsync("https://pcso-czapanza-backend.azurewebsites.net/todoitems");
+    }
     private async void AddToDo()
     {
         // Now we want to use our Web API
@@ -86,7 +92,7 @@ else
         public string name { get; set; }
         public bool isComplete { get; set; }
         public string message { get; set; }
-        public DateTime created { get; set; }
+        public DateTime created { get; set; } = DateTime.Now;
     }
 
 }
