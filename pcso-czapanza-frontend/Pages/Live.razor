@@ -1,39 +1,66 @@
 ﻿@page "/live"
 @implements IAsyncDisposable
-@using Microsoft.AspNetCore.SignalR.Client@if (messages != null)
+@using Microsoft.AspNetCore.SignalR.Client
+
+
+
+@if (messages != null)
 {
     @foreach (var message in messages)
     {
         <MudCard>
-            <MudCardContent>
-                <MudText Typo="Typo.body2">@message</MudText>
-            </MudCardContent>
+        <MudCardContent>
+        <MudText Typo="Typo.body2">@message</MudText>
+        </MudCardContent>
         </MudCard>
         <br />
     }
 }
+
+
+
 <MudTextField @bind-Value="name" Label="Name" Variant="Variant.Outlined"></MudTextField>
 <MudTextField @bind-Value="message" Label="Message" Variant="Variant.Outlined"></MudTextField>
 <br />
 <MudButton Variant="Variant.Filled"
-           EndIcon="@Icons.Material.Filled.Send"
-           OnClick="Send"
-           Color="Color.Primary">Send</MudButton>
+EndIcon="@Icons.Material.Filled.Send"
+OnClick="Send"
+Color="Color.Primary">Send</MudButton>
+
+
+
+
 @code {
     private HubConnection? hubConnection;
     private List<string> messages = new List<string>();
     private string? name;
-    private string? message; protected override async Task OnInitializedAsync()
+    private string? message;
+
+
+
+    protected override async Task OnInitializedAsync()
     {
         hubConnection = new HubConnectionBuilder()
         .WithUrl("https://pcso-ali-backend.azurewebsites.net/chat")
-        .Build(); hubConnection.On<string, string>("Receive", (name, message) =>
+
+        .Build();
+
+
+
+        hubConnection.On<string, string>("Receive", (name, message) =>
         {
             var encodedMsg = $"{name} {message}";
             messages.Add(encodedMsg);
             StateHasChanged();
-        }); await hubConnection.StartAsync();
+        });
+
+
+
+        await hubConnection.StartAsync();
     }
+
+
+
     private async Task Send()
     {
         if (hubConnection is not null)
@@ -42,7 +69,14 @@
             message = null;
         }
     }
-    public bool IsConnected => hubConnection?.State == HubConnectionState.Connected; public async ValueTask DisposeAsync()
+
+
+
+    public bool IsConnected => hubConnection?.State == HubConnectionState.Connected;
+
+
+
+    public async ValueTask DisposeAsync()
     {
         if (hubConnection is not null)
         {
@@ -50,4 +84,3 @@
         }
     }
 }
-
