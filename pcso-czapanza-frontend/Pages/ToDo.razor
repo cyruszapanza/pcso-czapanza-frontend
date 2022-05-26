@@ -41,6 +41,8 @@ else
 <button class="btn btn-primary" @onclick="AddToDo">Add To Do</button>
 <button class="btn btn-primary" @onclick="InvokeJavaScript">Invoke JavaScript</button>
 <button class="btn btn-primary" @onclick="DeleteAll">Delete All</button>
+<MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary">Send</MudButton>
+
 @code {
     private int count = 0;
     private string jsonData;
